@@ -133,9 +133,9 @@
 
             <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl space-y-4">
                 <h4 class="text-xl font-bold text-white flex items-center">
-                    <i class="fa-solid fa-book-open text-brand-accent mr-3"></i>Your Enrolled Examination Program
+                    <i class="fa-solid fa-book-open text-brand-accent mr-3"></i>Enrolled Examination Program
                 </h4>
-                <p class="text-slate-300 text-sm">You are locked to your chosen program per academy policy. You can only take your registered program's assessment.</p>
+                <p class="text-slate-300 text-sm">Per academy policy, you are restricted to your chosen program. You can only take your assigned program exam once per calendar day (60 minutes duration).</p>
                 
                 <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
                     <!-- Dynamic Program Cards injected here -->
@@ -224,6 +224,7 @@
                 <div class="text-left bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-2 text-sm text-slate-300">
                     <p><strong class="text-white">Student Name:</strong> <span id="res-name">-</span></p>
                     <p><strong class="text-white">Admission ID:</strong> <span id="res-id">-</span></p>
+                    <p><strong class="text-white">Shift:</strong> <span id="res-shift">-</span></p>
                     <p><strong class="text-white">Submission Date:</strong> <span id="res-date">-</span></p>
                     <p><strong class="text-white">Founder Notification:</strong> <span class="text-emerald-400">Successfully Dispatched to skargbo31@gmail.com</span></p>
                 </div>
@@ -240,16 +241,21 @@
         </div>
 
         <!-- VIEW 5: ADMIN DASHBOARD -->
-        <div id="view-admin" class="w-full max-w-6xl hidden space-y-6">
+        <div id="view-admin" class="w-full max-w-7xl hidden space-y-8">
             <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl flex flex-wrap justify-between items-center">
                 <div>
                     <span class="text-xs uppercase font-bold tracking-wider text-amber-400 bg-amber-950 px-3 py-1 rounded-full border border-amber-800">Administrator Portal</span>
                     <h3 class="text-2xl font-bold text-white mt-2">SSCA Executive Control Center</h3>
                     <p class="text-slate-400 text-sm">Managing Director: skargbo31@gmail.com</p>
                 </div>
-                <button onclick="app.router('home')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm font-semibold transition">
-                    <i class="fa-solid fa-arrow-left mr-2"></i>Exit Admin
-                </button>
+                <div class="flex items-center space-x-3 mt-4 sm:mt-0">
+                    <button onclick="app.openAddStudentModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition flex items-center space-x-2">
+                        <i class="fa-solid fa-user-plus"></i><span>Add Student</span>
+                    </button>
+                    <button onclick="app.router('home')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm font-semibold transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Exit Admin
+                    </button>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -267,37 +273,37 @@
                 </div>
             </div>
 
-            <!-- Student Accounts Management Section (With Edit & Delete) -->
+            <!-- SECTION A: REGISTERED STUDENTS DIRECTORY -->
             <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl space-y-4">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-xl font-bold text-white"><i class="fa-solid fa-user-gear mr-2 text-amber-400"></i>Student Accounts Management (Edit & Delete)</h4>
+                    <h4 class="text-xl font-bold text-white"><i class="fa-solid fa-users mr-2 text-blue-400"></i>Registered Students Directory (Edit & Delete)</h4>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
-                                <th class="p-3">Admission ID</th>
+                                <th class="p-3">Student ID</th>
                                 <th class="p-3">Full Name</th>
                                 <th class="p-3">Phone</th>
-                                <th class="p-3">Email</th>
+                                <th class="p-3">Shift</th>
                                 <th class="p-3">Program</th>
                                 <th class="p-3">Access Code</th>
                                 <th class="p-3 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-students-list-tbody" class="text-sm text-slate-300 divide-y divide-slate-700/50">
+                        <tbody id="admin-students-tbody" class="text-sm text-slate-300 divide-y divide-slate-700/50">
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Submissions Table Section -->
+            <!-- SECTION B: EXAM SUBMISSIONS DIRECTORY -->
             <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl space-y-4">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-xl font-bold text-white"><i class="fa-solid fa-users mr-2 text-blue-400"></i>Exam Submissions Directory</h4>
+                    <h4 class="text-xl font-bold text-white"><i class="fa-solid fa-file-lines mr-2 text-emerald-400"></i>Exam Submissions Directory (Edit & Delete)</h4>
                     <button onclick="app.exportAdminData()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition">
-                        <i class="fa-solid fa-download mr-2"></i>Export Records
+                        <i class="fa-solid fa-download mr-2"></i>Export CSV
                     </button>
                 </div>
                 <div class="overflow-x-auto">
@@ -306,14 +312,14 @@
                             <tr class="border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
                                 <th class="p-3">Admission ID</th>
                                 <th class="p-3">Full Name</th>
-                                <th class="p-3">Phone</th>
-                                <th class="p-3">Email</th>
-                                <th class="p-3">Exam Taken</th>
+                                <th class="p-3">Shift</th>
+                                <th class="p-3">Exam Program</th>
                                 <th class="p-3">Score</th>
                                 <th class="p-3">Status</th>
+                                <th class="p-3 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-students-tbody" class="text-sm text-slate-300 divide-y divide-slate-700/50">
+                        <tbody id="admin-submissions-tbody" class="text-sm text-slate-300 divide-y divide-slate-700/50">
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
@@ -333,8 +339,8 @@
             </div>
             <form id="form-signup" onsubmit="app.handleSignup(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Your Admission ID</label>
-                    <input type="text" id="signup-id" required placeholder="e.g. SSCA004" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 uppercase">
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Your Student ID (Choose Your Own)</label>
+                    <input type="text" id="signup-id" required placeholder="e.g. SSCA001 or MYID123" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white uppercase focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Full Name</label>
@@ -349,7 +355,15 @@
                     <input type="email" id="signup-email" required placeholder="student@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Select Examination Program</label>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Study Shift</label>
+                    <select id="signup-shift" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <option value="Morning Shift">Morning Shift</option>
+                        <option value="Afternoon Shift">Afternoon Shift</option>
+                        <option value="Evening Shift">Evening Shift</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Assigned Program (Locked After Selection)</label>
                     <select id="signup-program" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
                         <option value="windows">Introduction to Windows</option>
                         <option value="word">Microsoft Word</option>
@@ -361,10 +375,10 @@
                     </select>
                 </div>
                 <div class="bg-blue-950/50 border border-blue-800 p-3 rounded-xl text-xs text-blue-300">
-                    <i class="fa-solid fa-info-circle mr-1"></i> You will be locked to your selected program per academy policy. An admin confirmation notification will be sent to <strong>skargbo31@gmail.com</strong>.
+                    <i class="fa-solid fa-info-circle mr-1"></i> Admin notification will be dispatched to <strong>skargbo31@gmail.com</strong>.
                 </div>
                 <button type="submit" class="w-full py-3 bg-brand-accent hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg transition">
-                    Register Student Account
+                    Register Account
                 </button>
             </form>
         </div>
@@ -380,14 +394,22 @@
             <form id="form-login" onsubmit="app.handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Student Admission ID</label>
-                    <input type="text" id="login-id" required placeholder="e.g. SSCA001" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 uppercase">
+                    <input type="text" id="login-id" required placeholder="e.g. SSCA001" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white uppercase focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Email Address</label>
                     <input type="email" id="login-email" required placeholder="student@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
                 </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Verify Study Shift</label>
+                    <select id="login-shift" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <option value="Morning Shift">Morning Shift</option>
+                        <option value="Afternoon Shift">Afternoon Shift</option>
+                        <option value="Evening Shift">Evening Shift</option>
+                    </select>
+                </div>
                 <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition">
-                    Proceed to Portal Dashboard
+                    Proceed to Exam Code Entry
                 </button>
             </form>
         </div>
@@ -417,54 +439,6 @@
         </div>
     </div>
 
-    <!-- MODAL: ADMIN EDIT STUDENT -->
-    <div id="modal-edit-student" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-6">
-            <div class="flex justify-between items-center border-b border-slate-700 pb-4">
-                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-user-pen text-amber-500 mr-2"></i>Edit Student Record</h3>
-                <button onclick="app.closeModal('edit-student')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="form-edit-student" onsubmit="app.handleUpdateStudent(event)" class="space-y-4">
-                <input type="hidden" id="edit-original-id">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Student Admission ID</label>
-                    <input type="text" id="edit-id" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white uppercase">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Full Name</label>
-                    <input type="text" id="edit-name" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Phone Number</label>
-                    <input type="tel" id="edit-phone" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Email Address</label>
-                    <input type="email" id="edit-email" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Enrolled Program</label>
-                    <select id="edit-program" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white">
-                        <option value="windows">Introduction to Windows</option>
-                        <option value="word">Microsoft Word</option>
-                        <option value="publisher">Microsoft Publisher</option>
-                        <option value="powerpoint">Microsoft PowerPoint</option>
-                        <option value="excel">Microsoft Excel</option>
-                        <option value="access">Microsoft Access</option>
-                        <option value="internet">Internet Communications</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Access Code</label>
-                    <input type="text" id="edit-code" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono">
-                </div>
-                <button type="submit" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-lg transition">
-                    Save Changes
-                </button>
-            </form>
-        </div>
-    </div>
-
     <!-- MODAL: ADMIN LOGIN -->
     <div id="modal-admin-login" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-6">
@@ -487,6 +461,94 @@
                 </div>
                 <button type="submit" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-lg transition">
                     Access Admin Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT STUDENT (ADMIN) -->
+    <div id="modal-edit-student" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+                <h3 id="edit-student-modal-title" class="text-xl font-bold text-white"><i class="fa-solid fa-user-pen text-blue-400 mr-2"></i>Edit Student Record</h3>
+                <button onclick="app.closeModal('edit-student')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-edit-student" onsubmit="app.saveStudentRecord(event)" class="space-y-4">
+                <input type="hidden" id="edit-original-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Student Admission ID</label>
+                    <input type="text" id="edit-student-id" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white uppercase focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Full Name</label>
+                    <input type="text" id="edit-student-name" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Phone Number</label>
+                    <input type="tel" id="edit-student-phone" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Email Address</label>
+                    <input type="email" id="edit-student-email" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Study Shift</label>
+                    <select id="edit-student-shift" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <option value="Morning Shift">Morning Shift</option>
+                        <option value="Afternoon Shift">Afternoon Shift</option>
+                        <option value="Evening Shift">Evening Shift</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Assigned Program</label>
+                    <select id="edit-student-program" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <option value="windows">Introduction to Windows</option>
+                        <option value="word">Microsoft Word</option>
+                        <option value="publisher">Microsoft Publisher</option>
+                        <option value="powerpoint">Microsoft PowerPoint</option>
+                        <option value="excel">Microsoft Excel</option>
+                        <option value="access">Microsoft Access</option>
+                        <option value="internet">Internet Communications</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT SUBMISSION (ADMIN) -->
+    <div id="modal-edit-submission" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-pen-to-square text-emerald-400 mr-2"></i>Edit Submission Record</h3>
+                <button onclick="app.closeModal('edit-submission')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-edit-submission" onsubmit="app.saveSubmissionRecord(event)" class="space-y-4">
+                <input type="hidden" id="edit-sub-index">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Student Admission ID</label>
+                    <input type="text" id="edit-sub-id" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Student Name</label>
+                    <input type="text" id="edit-sub-name" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Score (e.g. 45 / 50)</label>
+                    <input type="text" id="edit-sub-score" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Percentage (e.g. 90%)</label>
+                    <input type="text" id="edit-sub-pct" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Grade Status</label>
+                    <input type="text" id="edit-sub-grade" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
+                    Update Submission
                 </button>
             </form>
         </div>
@@ -797,17 +859,17 @@
                     examTimerInterval: null,
                     timeRemaining: 3600, // 1 hour in seconds
                     students: JSON.parse(localStorage.getItem('ssca_students')) || [
-                        { id: 'SSCA001', name: 'Mohamed Kamara', phone: '079678114', email: 'mohamed@gmail.com', program: 'windows', examsTaken: {}, accessCode: '984123' },
-                        { id: 'SSCA002', name: 'Ibrahim Sesay', phone: '076123456', email: 'ibrahim@gmail.com', program: 'word', examsTaken: {}, accessCode: '542189' },
-                        { id: 'SSCA003', name: 'Mariama Bangura', phone: '078987654', email: 'mariama@gmail.com', program: 'excel', examsTaken: {}, accessCode: '731642' }
+                        { id: 'SSCA001', name: 'Mohamed Kamara', phone: '079678114', email: 'mohamed@gmail.com', shift: 'Morning Shift', program: 'windows', examsTaken: {}, accessCode: '984123' },
+                        { id: 'SSCA002', name: 'Ibrahim Sesay', phone: '076123456', email: 'ibrahim@gmail.com', shift: 'Afternoon Shift', program: 'word', examsTaken: {}, accessCode: '542189' },
+                        { id: 'SSCA003', name: 'Mariama Bangura', phone: '078987654', email: 'mariama@gmail.com', shift: 'Evening Shift', program: 'excel', examsTaken: {}, accessCode: '731642' }
                     ],
-                    pendingCodeVerification: null,
                     lastResult: null
                 };
                 this.init();
             }
 
             init() {
+                this.renderProgramsGrid();
                 this.setupAntiCheat();
             }
 
@@ -840,18 +902,18 @@
                 document.getElementById(`modal-${modalId}`).classList.add('hidden');
             }
 
-            // Student Signup with custom Student ID and Selected Program
+            // Student Signup (User enters own ID, shift, and assigned program)
             handleSignup(e) {
                 e.preventDefault();
                 const id = document.getElementById('signup-id').value.trim().toUpperCase();
                 const name = document.getElementById('signup-name').value.trim();
                 const phone = document.getElementById('signup-phone').value.trim();
                 const email = document.getElementById('signup-email').value.trim();
+                const shift = document.getElementById('signup-shift').value;
                 const program = document.getElementById('signup-program').value;
 
-                // Check if ID already exists
                 if (this.state.students.some(s => s.id === id)) {
-                    alert('This Admission ID is already registered. Please choose a different ID or log in.');
+                    alert('This Student ID already exists. Please choose a different ID or log in.');
                     return;
                 }
 
@@ -862,6 +924,7 @@
                     name,
                     phone,
                     email,
+                    shift,
                     program,
                     examsTaken: {},
                     accessCode
@@ -870,26 +933,27 @@
                 this.state.students.push(newStudent);
                 this.saveData();
 
-                console.log(`[ADMIN NOTIFICATION - skargbo31@gmail.com] New Student Signup: ${name} (${id}), Program: ${program}. Generated Code: ${accessCode}`);
+                console.log(`[ADMIN NOTIFICATION - skargbo31@gmail.com] New Student Signup: ${name} (${id}), Shift: ${shift}, Program: ${program}. Code: ${accessCode}`);
 
                 this.closeModal('signup');
                 document.getElementById('form-signup').reset();
 
-                alert(`Registration Successful!\n\nAdmission ID: ${id}\nEnrolled Program: ${EXAM_PROGRAMS[program].title}\nAccess Code: ${accessCode}\n\nAn admin notification has been dispatched to skargbo31@gmail.com.`);
+                alert(`Registration Successful!\n\nAdmission ID: ${id}\nShift: ${shift}\nAccess Code: ${accessCode}\n\nNotification sent to skargbo31@gmail.com.`);
                 
                 this.state.currentUser = newStudent;
                 this.router('dashboard');
             }
 
-            // Student Login
+            // Student Login with ID, Email, and Shift
             handleLogin(e) {
                 e.preventDefault();
                 const id = document.getElementById('login-id').value.trim().toUpperCase();
                 const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const shift = document.getElementById('login-shift').value;
 
-                const student = this.state.students.find(s => s.id === id && s.email.toLowerCase() === email);
+                const student = this.state.students.find(s => s.id === id && s.email.toLowerCase() === email && s.shift === shift);
                 if (!student) {
-                    alert('Invalid Student ID or Email address. Please check your credentials or sign up.');
+                    alert('Invalid Student ID, Email, or Shift combination. Please verify your details.');
                     return;
                 }
 
@@ -918,7 +982,7 @@
             renderDashboard() {
                 if (!this.state.currentUser) return;
                 document.getElementById('dash-student-name').innerText = this.state.currentUser.name;
-                document.getElementById('dash-student-info').innerText = `Admission ID: ${this.state.currentUser.id} | Phone: ${this.state.currentUser.phone} | Program: ${EXAM_PROGRAMS[this.state.currentUser.program].title}`;
+                document.getElementById('dash-student-info').innerText = `Admission ID: ${this.state.currentUser.id} | Shift: ${this.state.currentUser.shift} | Phone: ${this.state.currentUser.phone}`;
                 this.renderProgramsGrid();
             }
 
@@ -928,18 +992,18 @@
                 container.innerHTML = '';
 
                 const today = new Date().toDateString();
-                const studentProgramId = this.state.currentUser ? this.state.currentUser.program : null;
+                const studentProgId = this.state.currentUser ? this.state.currentUser.program : null;
 
-                // Render ONLY the student's chosen program to enforce restriction ("student can not infereing at the other programs exam")
+                // Render only the student's chosen/assigned program to prevent interfering with other programs' exams
                 Object.values(EXAM_PROGRAMS).forEach(prog => {
-                    if (studentProgramId && prog.id !== studentProgramId) return; // Hide other programs
+                    if (studentProgId && prog.id !== studentProgId) return; // Restrict student to their chosen program
 
                     const hasTakenToday = this.state.currentUser && 
                         this.state.currentUser.examsTaken && 
                         this.state.currentUser.examsTaken[prog.id] === today;
 
                     const card = document.createElement('div');
-                    card.className = `bg-slate-900 border ${hasTakenToday ? 'border-slate-700 opacity-60' : 'border-blue-500 shadow-blue-900/50 shadow-lg'} p-6 rounded-2xl flex flex-col justify-between space-y-4`;
+                    card.className = `bg-slate-900 border ${hasTakenToday ? 'border-slate-700 opacity-60' : 'border-blue-500'} p-6 rounded-2xl shadow transition flex flex-col justify-between space-y-4`;
                     card.innerHTML = `
                         <div>
                             <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${prog.color} flex items-center justify-center text-white text-xl mb-4 shadow">
@@ -947,14 +1011,14 @@
                             </div>
                             <h5 class="text-lg font-bold text-white">${prog.title}</h5>
                             <p class="text-xs text-slate-400 mt-1">25 Objective Questions + 5 Essay Questions (60 Mins)</p>
-                            <span class="inline-block mt-3 px-2.5 py-1 bg-blue-900/60 text-blue-300 rounded-lg text-xs font-semibold">Your Registered Program</span>
+                            <span class="inline-block mt-3 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-950 text-blue-400 border border-blue-800">Your Enrolled Program</span>
                         </div>
                         <div>
                             ${hasTakenToday ? 
                                 `<span class="inline-block w-full text-center py-2 bg-slate-800 text-slate-400 rounded-xl text-xs font-semibold cursor-not-allowed">
                                     <i class="fa-solid fa-check mr-1"></i> Completed Today
                                 </span>` :
-                                `<button onclick="app.initiateExam('${prog.id}')" class="w-full py-2.5 bg-brand-accent hover:bg-orange-600 text-white font-semibold rounded-xl text-sm shadow transition flex items-center justify-center space-x-2">
+                                `<button onclick="app.initiateExam('${prog.id}')" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm shadow transition flex items-center justify-center space-x-2">
                                     <span>Start Exam</span><i class="fa-solid fa-arrow-right text-xs"></i>
                                 </button>`
                             }
@@ -995,13 +1059,18 @@
 
             startExamSession() {
                 const prog = this.state.currentProgram;
+                
+                // Shuffle/randomize questions dynamically for multiple students sitting exams simultaneously
+                const shuffledObjectives = [...prog.objective].sort(() => Math.random() - 0.5);
+                const shuffledEssays = [...prog.essay].sort(() => Math.random() - 0.5);
+
                 this.state.examQuestions = [
-                    ...prog.objective.map((q, i) => ({ ...q, type: 'objective', index: i })),
-                    ...prog.essay.map((q, i) => ({ ...q, type: 'essay', index: i }))
+                    ...shuffledObjectives.map((q, i) => ({ ...q, type: 'objective', index: i })),
+                    ...shuffledEssays.map((q, i) => ({ ...q, type: 'essay', index: i }))
                 ];
                 this.state.currentQIndex = 0;
                 this.state.userAnswers = {};
-                this.state.timeRemaining = 3600;
+                this.state.timeRemaining = 3600; // 60 minutes
 
                 document.getElementById('exam-program-title').innerText = prog.title;
                 this.router('exam');
@@ -1120,7 +1189,7 @@
 
             processSubmission(isCheat = false, statusLabel = "Completed") {
                 const prog = this.state.currentProgram;
-                const objectiveQs = prog.objective;
+                const objectiveQs = this.state.examQuestions.filter(q => q.type === 'objective');
                 
                 let objectiveScore = 0;
                 objectiveQs.forEach((oq, i) => {
@@ -1130,14 +1199,15 @@
                 });
 
                 let essayAnsweredCount = 0;
-                prog.essay.forEach((eq, i) => {
+                const essayQs = this.state.examQuestions.filter(q => q.type === 'essay');
+                essayQs.forEach((eq, i) => {
                     const ansIdx = objectiveQs.length + i;
                     if (this.state.userAnswers[ansIdx] && String(this.state.userAnswers[ansIdx]).trim().length > 5) {
                         essayAnsweredCount++;
                     }
                 });
 
-                const essayScore = Math.round((essayAnsweredCount / prog.essay.length) * 25);
+                const essayScore = Math.round((essayAnsweredCount / essayQs.length) * 25);
                 const totalScore = isCheat ? 0 : (objectiveScore + essayScore);
                 const percentage = Math.round((totalScore / 50) * 100);
 
@@ -1151,13 +1221,13 @@
                 const today = new Date().toDateString();
                 if (!this.state.currentUser.examsTaken) this.state.currentUser.examsTaken = {};
                 this.state.currentUser.examsTaken[prog.id] = today;
-                this.saveData();
 
                 const submissionRecord = {
                     studentId: this.state.currentUser.id,
                     studentName: this.state.currentUser.name,
                     phone: this.state.currentUser.phone,
                     email: this.state.currentUser.email,
+                    shift: this.state.currentUser.shift,
                     programTitle: prog.title,
                     score: `${totalScore} / 50`,
                     percentage: percentage + '%',
@@ -1169,10 +1239,11 @@
                 if (!window.sscaSubmissions) window.sscaSubmissions = JSON.parse(localStorage.getItem('ssca_submissions')) || [];
                 window.sscaSubmissions.push(submissionRecord);
                 localStorage.setItem('ssca_submissions', JSON.stringify(window.sscaSubmissions));
+                this.saveData();
 
                 this.state.lastResult = submissionRecord;
 
-                console.log(`[CEO NOTIFICATION - skargbo31@gmail.com] Exam Result Submitted:\nStudent: ${submissionRecord.studentName} (${submissionRecord.studentId})\nProgram: ${submissionRecord.programTitle}\nScore: ${submissionRecord.score} (${submissionRecord.percentage}) - Grade: ${submissionRecord.grade}`);
+                console.log(`[CEO NOTIFICATION - skargbo31@gmail.com] Exam Result Submitted:\nStudent: ${submissionRecord.studentName} (${submissionRecord.studentId})\nShift: ${submissionRecord.shift}\nProgram: ${submissionRecord.programTitle}\nScore: ${submissionRecord.score} (${submissionRecord.percentage}) - Grade: ${submissionRecord.grade}`);
 
                 this.renderResultView(submissionRecord, isPassed);
             }
@@ -1200,6 +1271,7 @@
 
                 document.getElementById('res-name').innerText = res.studentName;
                 document.getElementById('res-id').innerText = res.studentId;
+                document.getElementById('res-shift').innerText = res.shift;
                 document.getElementById('res-date').innerText = res.date;
 
                 this.router('results');
@@ -1235,6 +1307,7 @@
                 const details = [
                     [`Student Full Name:`, res.studentName],
                     [`Admission ID:`, res.studentId],
+                    [`Study Shift:`, res.shift],
                     [`Phone Number:`, res.phone],
                     [`Email Address:`, res.email],
                     [`Examination Program:`, res.programTitle],
@@ -1265,7 +1338,7 @@
                 doc.save(`SSCA_Result_${res.studentId}_${res.programTitle.replace(/\s+/g, '_')}.pdf`);
             }
 
-            // Admin Dashboard Render & Student Management (Edit & Delete)
+            // ADMIN DASHBOARD RENDER & MANAGEMENT
             renderAdminDashboard() {
                 const students = this.state.students;
                 const submissions = JSON.parse(localStorage.getItem('ssca_submissions')) || [];
@@ -1274,122 +1347,183 @@
                 document.getElementById('admin-stat-submissions').innerText = submissions.length;
                 document.getElementById('admin-stat-codes').innerText = students.length;
 
-                // Render Student Accounts Table with Edit & Delete buttons
-                const studentsListTbody = document.getElementById('admin-students-list-tbody');
-                studentsListTbody.innerHTML = '';
-
+                // 1. Render Students Directory Table
+                const studentsTbody = document.getElementById('admin-students-tbody');
+                studentsTbody.innerHTML = '';
                 if (students.length === 0) {
-                    studentsListTbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No registered students found.</td></tr>`;
+                    studentsTbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No students registered.</td></tr>`;
                 } else {
                     students.forEach(st => {
                         const tr = document.createElement('tr');
                         tr.className = "hover:bg-slate-700/30 transition";
-                        const progTitle = EXAM_PROGRAMS[st.program] ? EXAM_PROGRAMS[st.program].title : st.program;
                         tr.innerHTML = `
                             <td class="p-3 font-mono font-bold text-white">${st.id}</td>
                             <td class="p-3 font-semibold text-white">${st.name}</td>
                             <td class="p-3">${st.phone}</td>
-                            <td class="p-3">${st.email}</td>
-                            <td class="p-3 text-blue-400">${progTitle}</td>
-                            <td class="p-3 font-mono text-amber-400">${st.accessCode}</td>
+                            <td class="p-3"><span class="px-2 py-1 bg-slate-900 rounded-md text-xs text-blue-300 border border-slate-700">${st.shift || 'Morning Shift'}</span></td>
+                            <td class="p-3 text-amber-400 font-medium">${EXAM_PROGRAMS[st.program] ? EXAM_PROGRAMS[st.program].title : st.program}</td>
+                            <td class="p-3 font-mono text-emerald-400">${st.accessCode}</td>
                             <td class="p-3 text-right space-x-2">
-                                <button onclick="app.openEditStudent('${st.id}')" class="px-2.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition" title="Edit Student">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                                </button>
-                                <button onclick="app.deleteStudent('${st.id}')" class="px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold transition" title="Delete Student">
-                                    <i class="fa-solid fa-trash"></i> Delete
-                                </button>
+                                <button onclick="app.openEditStudentModal('${st.id}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs transition"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button onclick="app.deleteStudent('${st.id}')" class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs transition"><i class="fa-solid fa-trash"></i> Delete</button>
                             </td>
                         `;
-                        studentsListTbody.appendChild(tr);
+                        studentsTbody.appendChild(tr);
                     });
                 }
 
-                // Render Submissions Table
-                const tbody = document.getElementById('admin-students-tbody');
-                tbody.innerHTML = '';
-
+                // 2. Render Submissions Directory Table
+                const subTbody = document.getElementById('admin-submissions-tbody');
+                subTbody.innerHTML = '';
                 if (submissions.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No exam submissions recorded yet.</td></tr>`;
-                    return;
-                }
-
-                submissions.forEach(sub => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-700/30 transition";
-                    tr.innerHTML = `
-                        <td class="p-3 font-mono font-bold text-white">${sub.studentId}</td>
-                        <td class="p-3 font-semibold text-white">${sub.studentName}</td>
-                        <td class="p-3">${sub.phone}</td>
-                        <td class="p-3">${sub.email}</td>
-                        <td class="p-3 text-blue-400 font-medium">${sub.programTitle}</td>
-                        <td class="p-3 font-bold">${sub.score} (${sub.percentage})</td>
-                        <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${sub.status.includes('Terminated') ? 'bg-red-950 text-red-400 border border-red-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'}">${sub.status}</span></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            // Admin Student Delete Function
-            deleteStudent(studentId) {
-                if (confirm(`Are you sure you want to delete student ID ${studentId}? This action cannot be undone.`)) {
-                    this.state.students = this.state.students.filter(s => s.id !== studentId);
-                    this.saveData();
-                    this.renderAdminDashboard();
-                    alert(`Student ${studentId} deleted successfully.`);
+                    subTbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No exam submissions recorded yet.</td></tr>`;
+                } else {
+                    submissions.forEach((sub, idx) => {
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-700/30 transition";
+                        tr.innerHTML = `
+                            <td class="p-3 font-mono font-bold text-white">${sub.studentId}</td>
+                            <td class="p-3 font-semibold text-white">${sub.studentName}</td>
+                            <td class="p-3">${sub.shift || 'Morning Shift'}</td>
+                            <td class="p-3 text-blue-400 font-medium">${sub.programTitle}</td>
+                            <td class="p-3 font-bold">${sub.score} (${sub.percentage})</td>
+                            <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${sub.status.includes('Terminated') ? 'bg-red-950 text-red-400 border border-red-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'}">${sub.status}</span></td>
+                            <td class="p-3 text-right space-x-2">
+                                <button onclick="app.openEditSubmissionModal(${idx})" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs transition"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button onclick="app.deleteSubmission(${idx})" class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs transition"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </td>
+                        `;
+                        subTbody.appendChild(tr);
+                    });
                 }
             }
 
-            // Admin Open Edit Modal
-            openEditStudent(studentId) {
-                const student = this.state.students.find(s => s.id === studentId);
-                if (!student) return;
+            // Student Record Admin Operations (Add/Edit/Delete)
+            openAddStudentModal() {
+                document.getElementById('edit-student-modal-title').innerHTML = '<i class="fa-solid fa-user-plus text-emerald-400 mr-2"></i>Add New Student Record';
+                document.getElementById('form-edit-student').reset();
+                document.getElementById('edit-original-id').value = '';
+                document.getElementById('edit-student-id').readOnly = false;
+                this.showModal('edit-student');
+            }
 
-                document.getElementById('edit-original-id').value = student.id;
-                document.getElementById('edit-id').value = student.id;
-                document.getElementById('edit-name').value = student.name;
-                document.getElementById('edit-phone').value = student.phone;
-                document.getElementById('edit-email').value = student.email;
-                document.getElementById('edit-program').value = student.program || 'windows';
-                document.getElementById('edit-code').value = student.accessCode;
+            openEditStudentModal(studentId) {
+                const st = this.state.students.find(s => s.id === studentId);
+                if (!st) return;
+
+                document.getElementById('edit-student-modal-title').innerHTML = '<i class="fa-solid fa-user-pen text-blue-400 mr-2"></i>Edit Student Record';
+                document.getElementById('edit-original-id').value = st.id;
+                document.getElementById('edit-student-id').value = st.id;
+                document.getElementById('edit-student-id').readOnly = true; // Keep ID stable or editable
+                document.getElementById('edit-student-name').value = st.name;
+                document.getElementById('edit-student-phone').value = st.phone;
+                document.getElementById('edit-student-email').value = st.email;
+                document.getElementById('edit-student-shift').value = st.shift || 'Morning Shift';
+                document.getElementById('edit-student-program').value = st.program || 'windows';
 
                 this.showModal('edit-student');
             }
 
-            // Admin Save Edited Student Record
-            handleUpdateStudent(e) {
+            saveStudentRecord(e) {
                 e.preventDefault();
                 const originalId = document.getElementById('edit-original-id').value;
-                const newId = document.getElementById('edit-id').value.trim().toUpperCase();
-                const name = document.getElementById('edit-name').value.trim();
-                const phone = document.getElementById('edit-phone').value.trim();
-                const email = document.getElementById('edit-email').value.trim();
-                const program = document.getElementById('edit-program').value;
-                const accessCode = document.getElementById('edit-code').value.trim();
+                const id = document.getElementById('edit-student-id').value.trim().toUpperCase();
+                const name = document.getElementById('edit-student-name').value.trim();
+                const phone = document.getElementById('edit-student-phone').value.trim();
+                const email = document.getElementById('edit-student-email').value.trim();
+                const shift = document.getElementById('edit-student-shift').value;
+                const program = document.getElementById('edit-student-program').value;
 
-                const index = this.state.students.findIndex(s => s.id === originalId);
-                if (index !== -1) {
-                    this.state.students[index] = {
-                        ...this.state.students[index],
-                        id: newId,
+                if (originalId) {
+                    // Editing existing
+                    const st = this.state.students.find(s => s.id === originalId);
+                    if (st) {
+                        st.name = name;
+                        st.phone = phone;
+                        st.email = email;
+                        st.shift = shift;
+                        st.program = program;
+                    }
+                } else {
+                    // Adding new
+                    if (this.state.students.some(s => s.id === id)) {
+                        alert('Student ID already exists.');
+                        return;
+                    }
+                    const accessCode = Math.floor(100000 + Math.random() * 900000).toString();
+                    this.state.students.push({
+                        id,
                         name,
                         phone,
                         email,
+                        shift,
                         program,
+                        examsTaken: {},
                         accessCode
-                    };
+                    });
+                }
+
+                this.saveData();
+                this.closeModal('edit-student');
+                this.renderAdminDashboard();
+                alert('Student record successfully saved.');
+            }
+
+            deleteStudent(studentId) {
+                if (confirm(`Are you sure you want to delete student ${studentId}?`)) {
+                    this.state.students = this.state.students.filter(s => s.id !== studentId);
                     this.saveData();
-                    this.closeModal('edit-student');
                     this.renderAdminDashboard();
-                    alert(`Student record updated successfully.`);
+                }
+            }
+
+            // Exam Submissions Admin Operations (Edit/Delete)
+            openEditSubmissionModal(idx) {
+                const submissions = JSON.parse(localStorage.getItem('ssca_submissions')) || [];
+                const sub = submissions[idx];
+                if (!sub) return;
+
+                document.getElementById('edit-sub-index').value = idx;
+                document.getElementById('edit-sub-id').value = sub.studentId;
+                document.getElementById('edit-sub-name').value = sub.studentName;
+                document.getElementById('edit-sub-score').value = sub.score;
+                document.getElementById('edit-sub-pct').value = sub.percentage;
+                document.getElementById('edit-sub-grade').value = sub.grade;
+
+                this.showModal('edit-submission');
+            }
+
+            saveSubmissionRecord(e) {
+                e.preventDefault();
+                const idx = Number(document.getElementById('edit-sub-index').value);
+                const submissions = JSON.parse(localStorage.getItem('ssca_submissions')) || [];
+
+                if (submissions[idx]) {
+                    submissions[idx].score = document.getElementById('edit-sub-score').value.trim();
+                    submissions[idx].percentage = document.getElementById('edit-sub-pct').value.trim();
+                    submissions[idx].grade = document.getElementById('edit-sub-grade').value.trim();
+
+                    localStorage.setItem('ssca_submissions', JSON.stringify(submissions));
+                    this.closeModal('edit-submission');
+                    this.renderAdminDashboard();
+                    alert('Submission record updated successfully.');
+                }
+            }
+
+            deleteSubmission(idx) {
+                if (confirm('Are you sure you want to delete this submission record?')) {
+                    let submissions = JSON.parse(localStorage.getItem('ssca_submissions')) || [];
+                    submissions.splice(idx, 1);
+                    localStorage.setItem('ssca_submissions', JSON.stringify(submissions));
+                    this.renderAdminDashboard();
                 }
             }
 
             exportAdminData() {
                 const submissions = JSON.parse(localStorage.getItem('ssca_submissions')) || [];
-                let csvContent = "data:text/csv;charset=utf-8,Admission ID,Full Name,Phone,Email,Program,Score,Percentage,Grade,Status,Date\n";
+                let csvContent = "data:text/csv;charset=utf-8,Admission ID,Full Name,Shift,Program,Score,Percentage,Grade,Status,Date\n";
                 submissions.forEach(s => {
-                    csvContent += `"${s.studentId}","${s.studentName}","${s.phone}","${s.email}","${s.programTitle}","${s.score}","${s.percentage}","${s.grade}","${s.status}","${s.date}"\n`;
+                    csvContent += `"${s.studentId}","${s.studentName}","${s.shift || 'Morning Shift'}","${s.programTitle}","${s.score}","${s.percentage}","${s.grade}","${s.status}","${s.date}"\n`;
                 });
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
@@ -1406,6 +1540,7 @@
             }
         }
 
+        // Initialize App instance
         const app = new ExamPortalApp();
     </script>
 </body>
