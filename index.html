@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartStart Computer Academy - Examination Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        ssca: {
+                            50: '#eef6ff',
+                            100: '#d9edff',
+                            500: '#0066cc',
+                            600: '#0052a3',
+                            700: '#003d7a',
+                            900: '#00264d'
+                        }
+                    }
+                    
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-select { user-select: none; }
+    </style>
+</head>
+<body class="h-full bg-gradient-to-br from-slate-900 via-ssca-900 to-blue-950 text-slate-100 flex flex-col justify-between antialiased selection:bg-ssca-500 selection:text-white">
+
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 lg:px-8 py-4 flex items-center justify-between shadow-xl">
+        <div class="flex items-center space-x-3">
+            <img src="./SMARTSTART_COMPUTER.png" 
+                 onerror="this.src='https://placehold.co/100x100/003d7a/ffffff?text=SSCA'" 
+                 alt="SSCA Logo" class="w-12 h-12 rounded-xl object-cover shadow-md border-2 border-ssca-500">
+            <div>
+                <h1 class="font-extrabold text-lg lg:text-xl tracking-tight text-white">SMARTSTART</h1>
+                <p class="text-xs text-ssca-400 font-medium tracking-widest uppercase">Computer Academy</p>
+            </div>
+        </div>
+        <div id="header-user-info" class="hidden items-center space-x-4 bg-slate-800/60 px-4 py-2 rounded-xl border border-slate-700/50 text-sm">
+            <span class="flex items-center space-x-2">
+                <i class="fa-solid fa-user-graduate text-ssca-400"></i>
+                <span id="nav-student-name" class="font-semibold text-slate-200"></span>
+            </span>
+            <span class="text-slate-500">|</span>
+            <span class="text-xs bg-ssca-500/20 text-ssca-300 px-2.5 py-1 rounded-full font-mono uppercase border border-ssca-500/30" id="nav-student-id"></span>
+            <button onclick="logoutSession()" class="text-rose-400 hover:text-rose-300 text-xs font-semibold ml-2 transition-colors">
+                <i class="fa-solid fa-power-off mr-1"></i> Exit
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+
+        <!-- STEP 1: LOGIN / SIGNUP VIEW -->
+        <div id="view-auth" class="w-full max-w-md bg-slate-800/90 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden p-8 transition-all duration-300">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-ssca-500/10 rounded-2xl mb-3 border border-ssca-500/30">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-ssca-400"></i>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-white">Student Examination Portal</h2>
+                <p class="text-sm text-slate-400 mt-1">Enter your admission details to begin</p>
+            </div>
+
+            <form id="form-auth" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Admission ID</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-id-card"></i>
+                        </span>
+                        <input type="text" id="auth-id" required list="default-ids" placeholder="e.g. SSCA001 or custom ID" 
+                               class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ssca-500 focus:border-transparent text-sm">
+                        <datalist id="default-ids">
+                            <option value="SSCA001">
+                            <option value="SSCA002">
+                            <option value="SSCA003">
+                            <option value="SSCA004">
+                            <option value="SSCA005">
+                        </datalist>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Full Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="auth-name" required placeholder="Enter your full name" 
+                               class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ssca-500 focus:border-transparent text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Phone Number</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <input type="tel" id="auth-phone" required placeholder="e.g. +232 76 000 000" 
+                               class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ssca-500 focus:border-transparent text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Email Address</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <input type="email" id="auth-email" required placeholder="student@example.com" 
+                               class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ssca-500 focus:border-transparent text-sm">
+                    </div>
+                </div>
+
+                <div id="auth-error" class="hidden text-xs text-rose-400 bg-rose-500/10 p-3 rounded-lg border border-rose-500/20"></div>
+
+                <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-ssca-500 to-blue-600 hover:from-ssca-600 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-ssca-500/30 transition-all duration-200 flex items-center justify-center space-x-2">
+                    <span>Generate Verification Code</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- STEP 2: VERIFICATION CODE ENTRY MODAL/VIEW -->
+        <div id="view-verify" class="hidden w-full max-w-md bg-slate-800/90 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden p-8">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-500/10 rounded-2xl mb-3 border border-amber-500/30">
+                    <i class="fa-solid fa-shield-halved text-2xl text-amber-400"></i>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-white">Admin Verification Sent</h2>
+                <p class="text-sm text-slate-400 mt-1">A confirmation code has been sent to admin <span class="text-slate-200 font-mono">skargbo31@gmail.com</span> and simulated to your screen.</p>
+            </div>
+
+            <!-- Simulation Banner -->
+            <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6 text-center">
+                <span class="text-xs text-blue-300 uppercase font-bold tracking-wider block mb-1">Admin Notification Simulated</span>
+                <span id="display-generated-code" class="text-3xl font-mono font-extrabold tracking-widest text-blue-400">----</span>
+                <p class="text-xs text-slate-400 mt-2">Enter this 4-digit code below to unlock your exam session.</p>
+            </div>
+
+            <form onsubmit="handleVerifyCode(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Enter 4-Digit Exam Code</label>
+                    <input type="text" id="input-verify-code" required maxlength="4" placeholder="e.g. 4829" 
+                           class="w-full text-center tracking-[1em] text-2xl font-mono py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-ssca-500">
+                </div>
+
+                <div id="verify-error" class="hidden text-xs text-rose-400 bg-rose-500/10 p-3 rounded-lg border border-rose-500/20 text-center"></div>
+
+                <div class="flex space-x-3">
+                    <button type="button" onclick="backToAuth()" class="w-1/3 py-3 px-4 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl transition-all text-sm">
+                        Cancel
+                    </button>
+                    <button type="submit" class="w-2/3 py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/20 transition-all text-sm flex items-center justify-center space-x-2">
+                        <span>Start Exam</span>
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- STEP 3: PROGRAM / COURSE SELECTION DASHBOARD -->
+        <div id="view-dashboard" class="hidden w-full max-w-4xl bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-700 mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Select Examination Program</h2>
+                    <p class="text-sm text-slate-400">Choose the course you want to test on. Note: Once submitted or cancelled, you cannot retake until tomorrow.</p>
+                </div>
+                <div class="bg-ssca-500/20 border border-ssca-500/40 px-4 py-2 rounded-xl text-xs text-ssca-300 font-medium">
+                    <i class="fa-solid fa-clock mr-1"></i> Duration: 60 Minutes
+                </div>
+            </div>
+
+            <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamically populated program cards -->
+            </div>
+        </div>
+
+        <!-- STEP 4: EXAM ACTIVE VIEW (WITH 60M TIMER & ANTI-CHEAT) -->
+        <div id="view-exam" class="hidden w-full max-w-4xl bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col no-select">
+            
+            <!-- Exam Header Bar -->
+            <div class="bg-slate-800/90 border-b border-slate-700 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <span id="exam-course-title" class="text-xs font-bold uppercase tracking-widest text-ssca-400">Program</span>
+                    <h3 id="exam-course-name" class="text-lg font-extrabold text-white">Course Title</h3>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="timer-box" class="bg-slate-900 border border-slate-700 px-4 py-2 rounded-xl flex items-center space-x-2 text-amber-400 font-mono font-bold text-lg shadow-inner">
+                        <i class="fa-solid fa-stopwatch animate-pulse"></i>
+                        <span id="timer-display">60:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-Cheat Warning Banner -->
+            <div id="cheat-warning" class="hidden bg-rose-500 text-white px-4 py-2 text-xs font-semibold text-center animate-bounce">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Warning: Leaving or switching tabs is strictly prohibited! Exam will be terminated immediately.
+            </div>
+
+            <!-- Exam Content Area -->
+            <div class="p-6 sm:p-8 flex-grow">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="question-counter" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Question 1 of 30</span>
+                    <span id="question-section-badge" class="bg-ssca-500/20 text-ssca-300 text-xs px-3 py-1 rounded-full font-semibold border border-ssca-500/30">Section A: Objective</span>
+                </div>
+
+                <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 mb-6">
+                    <h4 id="question-text" class="text-lg font-medium text-slate-100 mb-6 leading-relaxed">Loading question...</h4>
+
+                    <!-- Options Container (for Objective) -->
+                    <div id="options-container" class="space-y-3">
+                        <!-- Dynamically populated options -->
+                    </div>
+
+                    <!-- Essay Textarea Container -->
+                    <div id="essay-container" class="hidden">
+                        <textarea id="essay-answer" rows="6" placeholder="Type your detailed essay answer here..."
+                                  class="w-full p-4 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ssca-500 text-sm leading-relaxed"></textarea>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-800">
+                    <button onclick="prevQuestion()" id="btn-prev" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-sm transition-all flex items-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Previous</span>
+                    </button>
+
+                    <div id="question-dots" class="hidden sm:flex space-x-1.5 overflow-x-auto max-w-xs py-1">
+                        <!-- Quick jump dots -->
+                    </div>
+
+                    <button onclick="nextQuestion()" id="btn-next" class="px-6 py-2.5 bg-ssca-500 hover:bg-ssca-600 text-white font-semibold rounded-xl text-sm transition-all flex items-center space-x-2 shadow-lg shadow-ssca-500/20">
+                        <span>Next</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: RESULT & PDF DOWNLOAD VIEW -->
+        <div id="view-result" class="hidden w-full max-w-2xl bg-slate-800/90 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden p-8 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/10 rounded-full mb-4 border border-emerald-500/30">
+                <i class="fa-solid fa-award text-4xl text-emerald-400"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-white mb-1">Examination Completed</h2>
+            <p class="text-sm text-slate-400 mb-6">SmartStart Computer Academy Official Result Sheet</p>
+
+            <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-6 mb-6 text-left space-y-3">
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="text-slate-400 text-sm">Student Name:</span>
+                    <span id="res-name" class="font-bold text-slate-100 text-sm"></span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="text-slate-400 text-sm">Admission ID:</span>
+                    <span id="res-id" class="font-mono font-bold text-ssca-400 text-sm"></span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="text-slate-400 text-sm">Program:</span>
+                    <span id="res-program" class="font-semibold text-slate-100 text-sm"></span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="text-slate-400 text-sm">Objective Score:</span>
+                    <span id="res-obj-score" class="font-bold text-emerald-400 text-sm"></span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="text-slate-400 text-sm">Essay Status:</span>
+                    <span id="res-essay-status" class="font-bold text-blue-400 text-sm">Submitted for Grading</span>
+                </div>
+                <div class="flex justify-between pt-1">
+                    <span class="text-slate-400 text-base font-bold">Final Grade / Status:</span>
+                    <span id="res-status" class="font-extrabold text-lg"></span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="downloadPDFResult()" class="py-3 px-6 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Download Result as PDF</span>
+                </button>
+                <button onclick="logoutSession()" class="py-3 px-6 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl transition-all">
+                    Finish & Exit
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900/90 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        &copy; 2026 SmartStart Computer Academy. All Rights Reserved. Admin Email: skargbo31@gmail.com
+    </footer>
+
+    <script>
+        const COURSES = {
+            windows: {
+                title: "Introduction to Windows",
+                description: "Operating system fundamentals, desktop navigation, files, folders, and keyboard shortcuts.",
+                objective: [
+                    { q: "What is Windows?", options: ["A web browser", "An operating system", "A computer keyboard", "A computer game"], ans: 1 },
+                    { q: "Which company developed Microsoft Windows?", options: ["Apple", "Google", "Microsoft", "IBM"], ans: 2 },
+                    { q: "What is the Desktop?", options: ["The main screen that appears after Windows starts", "A printer", "A storage device", "A website"], ans: 0 },
+                    { q: "Which button is used to access programs and settings in Windows?", options: ["Spacebar", "Start button", "Shift button", "Delete button"], ans: 1 },
+                    { q: "What is the taskbar?", options: ["A bar used to display running applications and system information", "A computer mouse", "A storage device", "A document"], ans: 0 },
+                    { q: "Which device is commonly used to point, click, and select items in Windows?", options: ["Monitor", "Keyboard", "Mouse", "Printer"], ans: 2 },
+                    { q: "What does a double-click usually do?", options: ["Shuts down the computer", "Opens an item", "Deletes a file", "Prints a document"], ans: 1 },
+                    { q: "Which mouse action is used to display a shortcut menu?", options: ["Double-click", "Right-click", "Scroll", "Drag"], ans: 1 },
+                    { q: "What is an icon?", options: ["A small graphical representation of a program, file, or folder", "A computer virus", "A keyboard key", "A printer"], ans: 0 },
+                    { q: "Which shortcut is commonly used to copy selected text or files?", options: ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + Z"], ans: 1 },
+                    { q: "Which shortcut is used to paste copied information?", options: ["Ctrl + P", "Ctrl + S", "Ctrl + V", "Ctrl + A"], ans: 2 },
+                    { q: "Which shortcut is used to save a document?", options: ["Ctrl + S", "Ctrl + C", "Ctrl + X", "Ctrl + N"], ans: 0 },
+                    { q: "Which shortcut is used to undo the last action?", options: ["Ctrl + U", "Ctrl + Z", "Ctrl + Y", "Ctrl + D"], ans: 1 },
+                    { q: "What is a folder?", options: ["A place used to organize and store files", "A computer screen", "A keyboard button", "A type of virus"], ans: 0 },
+                    { q: "Which Windows feature allows you to search for files and programs?", options: ["Search", "Paint", "Recycle Bin", "Calculator"], ans: 0 },
+                    { q: "What is the Recycle Bin used for?", options: ["Storing deleted files temporarily", "Creating presentations", "Browsing the internet", "Playing music"], ans: 0 },
+                    { q: "Which option is used to make a window temporarily disappear from the screen?", options: ["Maximize", "Minimize", "Close", "Delete"], ans: 1 },
+                    { q: "Which button makes a window fill the entire screen?", options: ["Minimize", "Close", "Maximize", "Search"], ans: 2 },
+                    { q: "Which button is used to close a window?", options: ["X", "+", "–", "□"], ans: 0 },
+                    { q: "What does Ctrl + A do?", options: ["Saves a file", "Selects all", "Deletes a file", "Opens the Start menu"], ans: 1 },
+                    { q: "Which key can be used to delete a selected file?", options: ["Enter", "Shift", "Delete", "Tab"], ans: 2 },
+                    { q: "What is File Explorer used for?", options: ["Managing files and folders", "Creating computer viruses", "Playing only games", "Sending SMS messages"], ans: 0 },
+                    { q: "What does restarting a computer mean?", options: ["Removing all files", "Turning the computer off and immediately starting it again", "Deleting Windows", "Formatting the keyboard"], ans: 1 },
+                    { q: "Which option should normally be used when you want to safely turn off a Windows computer?", options: ["Delete", "Shut down", "Refresh", "Copy"], ans: 1 },
+                    { q: "What is the purpose of keyboard shortcuts?", options: ["To make common computer operations faster", "To damage the computer", "To increase screen size", "To remove Windows"], ans: 0 }
+                ],
+                essay: [
+                    "What is Windows? Explain its importance in a computer.",
+                    "Explain the main parts of the Windows Desktop.",
+                    "Explain the difference between a file and a folder.",
+                    "Explain five important keyboard shortcuts used in Windows.",
+                    "Explain how to create a new folder in Windows."
+                ]
+            },
+            word: {
+                title: "Microsoft Word",
+                description: "Word-processing, document creation, formatting, styles, tables, and mail merge.",
+                objective: [
+                    { q: "What is Microsoft Word?", options: ["A spreadsheet program", "A word-processing program", "A database program", "A presentation program"], ans: 1 },
+                    { q: "Which company developed Microsoft Word?", options: ["Google", "Apple", "Microsoft", "Adobe"], ans: 2 },
+                    { q: "What is the main purpose of Microsoft Word?", options: ["Creating and editing documents", "Creating databases", "Editing videos", "Browsing websites"], ans: 0 },
+                    { q: "Which shortcut is used to create a new document?", options: ["Ctrl + N", "Ctrl + S", "Ctrl + P", "Ctrl + O"], ans: 0 },
+                    { q: "Which shortcut is used to save a document?", options: ["Ctrl + C", "Ctrl + S", "Ctrl + V", "Ctrl + X"], ans: 1 },
+                    { q: "Which shortcut is used to open an existing document?", options: ["Ctrl + O", "Ctrl + N", "Ctrl + P", "Ctrl + E"], ans: 0 },
+                    { q: "Which shortcut is used to print a document?", options: ["Ctrl + S", "Ctrl + P", "Ctrl + C", "Ctrl + A"], ans: 1 },
+                    { q: "Which shortcut is used to copy selected text?", options: ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + Z"], ans: 1 },
+                    { q: "Which shortcut is used to paste copied text?", options: ["Ctrl + P", "Ctrl + X", "Ctrl + V", "Ctrl + A"], ans: 2 },
+                    { q: "Which shortcut is used to cut selected text?", options: ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + S"], ans: 0 },
+                    { q: "Which shortcut selects all the text in a document?", options: ["Ctrl + S", "Ctrl + A", "Ctrl + T", "Ctrl + D"], ans: 1 },
+                    { q: "Which shortcut is used to undo an action?", options: ["Ctrl + Y", "Ctrl + Z", "Ctrl + U", "Ctrl + R"], ans: 1 },
+                    { q: "Which shortcut is commonly used to make text bold?", options: ["Ctrl + B", "Ctrl + I", "Ctrl + U", "Ctrl + E"], ans: 0 },
+                    { q: "Which shortcut is used to italicize text?", options: ["Ctrl + B", "Ctrl + I", "Ctrl + U", "Ctrl + L"], ans: 1 },
+                    { q: "Which shortcut is used to underline text?", options: ["Ctrl + U", "Ctrl + B", "Ctrl + I", "Ctrl + R"], ans: 0 },
+                    { q: "Which alignment places text evenly between the left and right margins?", options: ["Left Align", "Right Align", "Center Align", "Justify"], ans: 3 },
+                    { q: "Which alignment places text in the middle of the page?", options: ["Left Align", "Center Align", "Right Align", "Justify"], ans: 1 },
+                    { q: "Which feature is used to change the size of text?", options: ["Font Size", "Font Color", "Paragraph", "Page Break"], ans: 0 },
+                    { q: "What is a font?", options: ["A page margin", "The design/style of text characters", "A type of printer", "A document folder"], ans: 1 },
+                    { q: "Which tab contains many tools for changing font style, size, color, and alignment?", options: ["Home", "Insert", "View", "Mailings"], ans: 0 },
+                    { q: "Which tab is used to insert pictures into a Word document?", options: ["Home", "Insert", "Review", "View"], ans: 1 },
+                    { q: "What is a header?", options: ["Text that appears at the top of a page", "Text that appears only in the middle", "A spelling error", "A page border"], ans: 0 },
+                    { q: "What is a footer?", options: ["Text that appears at the bottom of a page", "Text that appears at the top of a page", "A font style", "A picture"], ans: 0 },
+                    { q: "Which feature checks spelling and grammatical errors in a document?", options: ["Word Count", "Spelling & Grammar", "Mail Merge", "Page Color"], ans: 1 },
+                    { q: "What is Mail Merge used for?", options: ["Creating personalized documents for multiple recipients", "Editing pictures", "Drawing shapes only", "Deleting documents"], ans: 0 }
+                ],
+                essay: [
+                    "What is Microsoft Word? Explain five uses of Microsoft Word.",
+                    "Explain five formatting features available in Microsoft Word.",
+                    "Explain the steps involved in saving a Microsoft Word document.",
+                    "Explain the difference between Copy, Cut, and Paste in Microsoft Word.",
+                    "Explain how to insert a picture into a Microsoft Word document."
+                ]
+            },
+            publisher: {
+                title: "Microsoft Publisher",
+                description: "Desktop publishing, flyers, brochures, business cards, and publications.",
+                objective: [
+                    { q: "What is Microsoft Publisher mainly used for?", options: ["Calculating numbers", "Creating professional publications", "Browsing the internet", "Managing databases"], ans: 1 },
+                    { q: "Which company developed Microsoft Publisher?", options: ["Google", "Apple", "Microsoft", "Adobe"], ans: 2 },
+                    { q: "Which of the following can be created using Microsoft Publisher?", options: ["Flyers", "Brochures", "Business cards", "All of the above"], ans: 3 },
+                    { q: "What is a publication in Microsoft Publisher?", options: ["A computer virus", "A designed document intended for printing or sharing", "A computer program", "A database table"], ans: 1 },
+                    { q: "Which option allows you to start a new publication?", options: ["New", "Delete", "Print", "Save"], ans: 0 },
+                    { q: "What is a template?", options: ["A ready-made design or layout", "A computer password", "A type of virus", "A printer"], ans: 0 },
+                    { q: "Which tool is commonly used to insert text in Publisher?", options: ["Text Box", "Calculator", "Paint Brush", "Formula Bar"], ans: 0 },
+                    { q: "What is the purpose of a text box?", options: ["To insert and arrange text", "To delete pictures", "To shut down the computer", "To calculate figures"], ans: 0 },
+                    { q: "Which tab contains options for inserting pictures and shapes?", options: ["Home", "Insert", "Review", "View"], ans: 1 },
+                    { q: "Which of the following is an example of a graphic object?", options: ["Picture", "Shape", "Logo", "All of the above"], ans: 3 },
+                    { q: "Which feature is used to change the size of text?", options: ["Font Size", "Page Color", "Zoom", "Margins"], ans: 0 },
+                    { q: "Which feature makes text appear thicker?", options: ["Italic", "Underline", "Bold", "Superscript"], ans: 2 },
+                    { q: "Which keyboard shortcut is commonly used to save a Publisher document?", options: ["Ctrl + P", "Ctrl + S", "Ctrl + C", "Ctrl + X"], ans: 1 },
+                    { q: "Which keyboard shortcut is used to print a publication?", options: ["Ctrl + P", "Ctrl + S", "Ctrl + A", "Ctrl + Z"], ans: 0 },
+                    { q: "What does Ctrl + C do?", options: ["Cuts an object", "Copies selected content", "Closes Publisher", "Creates a new page"], ans: 1 },
+                    { q: "What does Ctrl + V do?", options: ["Pastes copied or cut content", "Saves a publication", "Prints a publication", "Deletes content"], ans: 0 },
+                    { q: "What is the purpose of alignment guides?", options: ["To help position objects accurately", "To delete objects", "To print documents", "To change passwords"], ans: 0 },
+                    { q: "Which publication is commonly used to promote a business, event, or service?", options: ["Flyer", "Database", "Spreadsheet", "Calculator"], ans: 0 },
+                    { q: "Which publication is normally used to provide information about a business or organization in folded sections?", options: ["Brochure", "Calculator", "Spreadsheet", "Database"], ans: 0 },
+                    { q: "What is a business card used for?", options: ["Storing computer files", "Providing personal or business contact information", "Creating calculations", "Browsing websites"], ans: 1 },
+                    { q: "Which command reverses the most recent action?", options: ["Redo", "Undo", "Save", "Print"], ans: 1 },
+                    { q: "What is the purpose of the Arrange feature?", options: ["To position and organize objects", "To calculate numbers", "To browse the internet", "To create passwords"], ans: 0 },
+                    { q: "Which of these can be changed to improve the appearance of a publication?", options: ["Font", "Color", "Layout", "All of the above"], ans: 3 },
+                    { q: "Why should a publication be saved regularly?", options: ["To prevent loss of work", "To increase internet speed", "To turn off the computer", "To delete the publication"], ans: 0 },
+                    { q: "Which option allows you to produce a physical copy of your publication?", options: ["Save", "Print", "Undo", "Copy"], ans: 1 }
+                ],
+                essay: [
+                    "What is Microsoft Publisher? Mention five uses of Microsoft Publisher.",
+                    "Explain the steps involved in creating a simple flyer in Microsoft Publisher.",
+                    "What is a template in Microsoft Publisher? State four advantages of using templates.",
+                    "Explain the difference between a flyer, brochure, and business card.",
+                    "Explain five important features of Microsoft Publisher."
+                ]
+            },
+            powerpoint: {
+                title: "Microsoft PowerPoint",
+                description: "Slide presentations, themes, animations, transitions, and multimedia delivery.",
+                objective: [
+                    { q: "What is Microsoft PowerPoint mainly used for?", options: ["Creating presentations", "Creating databases", "Browsing the internet", "Editing videos"], ans: 0 },
+                    { q: "What is a single page in PowerPoint called?", options: ["Sheet", "Slide", "Document", "Page"], ans: 1 },
+                    { q: "Which file extension is commonly used for a PowerPoint presentation?", options: [".docx", ".xlsx", ".pptx", ".accdb"], ans: 2 },
+                    { q: "Which tab is commonly used to add a new slide?", options: ["Home", "Review", "View", "File"], ans: 0 },
+                    { q: "Which shortcut creates a new PowerPoint presentation?", options: ["Ctrl + N", "Ctrl + P", "Ctrl + S", "Ctrl + O"], ans: 0 },
+                    { q: "Which shortcut saves a PowerPoint presentation?", options: ["Ctrl + C", "Ctrl + S", "Ctrl + V", "Ctrl + X"], ans: 1 },
+                    { q: "Which tab is used to add pictures to a presentation?", options: ["Insert", "Design", "Review", "View"], ans: 0 },
+                    { q: "Which tab is used to change the overall appearance of slides?", options: ["Home", "Design", "Review", "File"], ans: 1 },
+                    { q: "What is a PowerPoint theme?", options: ["A type of computer virus", "A collection of design elements for slides", "A spreadsheet", "A database"], ans: 1 },
+                    { q: "What is the purpose of Slide Show view?", options: ["To delete slides", "To present slides to an audience", "To rename files", "To create folders"], ans: 1 },
+                    { q: "Which key starts a PowerPoint slide show from the beginning?", options: ["F1", "F2", "F5", "F12"], ans: 2 },
+                    { q: "Which key can start the slide show from the current slide?", options: ["Shift + F5", "Ctrl + F5", "Alt + F5", "F2"], ans: 0 },
+                    { q: "What is a transition in PowerPoint?", options: ["An effect between slides", "A spelling mistake", "A type of font", "A picture format"], ans: 0 },
+                    { q: "What is an animation in PowerPoint?", options: ["An effect applied to objects on a slide", "A way to save files", "A type of slide layout", "A printer setting"], ans: 0 },
+                    { q: "Which tab is mainly used to add animations?", options: ["Animations", "Insert", "Review", "File"], ans: 0 },
+                    { q: "Which tab is used to add slide transitions?", options: ["Home", "Transitions", "Design", "View"], ans: 1 },
+                    { q: "Which option allows you to add text to a specific area of a slide?", options: ["Text Box", "Chart", "Table", "WordArt only"], ans: 0 },
+                    { q: "Which PowerPoint feature allows you to add speaker notes?", options: ["Notes pane", "Status bar", "Ribbon", "Title bar"], ans: 0 },
+                    { q: "Which option is used to add a chart to a slide?", options: ["Insert → Chart", "Home → Save", "Design → Theme", "Review → Spelling"], ans: 0 },
+                    { q: "What does Ctrl + C do?", options: ["Cuts selected content", "Copies selected content", "Closes PowerPoint", "Creates a slide"], ans: 1 },
+                    { q: "What does Ctrl + V do?", options: ["Pastes copied or cut content", "Saves the presentation", "Views the slide show", "Deletes a slide"], ans: 0 },
+                    { q: "What does Ctrl + Z do?", options: ["Saves a presentation", "Undoes the last action", "Opens a presentation", "Starts a slide show"], ans: 1 },
+                    { q: "Which feature allows you to rearrange the order of slides easily?", options: ["Slide Sorter", "Spell Check", "WordArt", "Notes"], ans: 0 },
+                    { q: "Which command is used to print PowerPoint slides?", options: ["Ctrl + P", "Ctrl + S", "Ctrl + N", "Ctrl + A"], ans: 0 },
+                    { q: "Why should a presentation use readable fonts and appropriate colors?", options: ["To make it easier for the audience to read", "To make the computer faster", "To reduce the file name", "To delete animations"], ans: 0 }
+                ],
+                essay: [
+                    "What is Microsoft PowerPoint? Explain its uses.",
+                    "Explain five important features of Microsoft PowerPoint.",
+                    "What is the difference between animation and transition in PowerPoint?",
+                    "Explain how to create and save a PowerPoint presentation.",
+                    "Explain how to deliver a good PowerPoint presentation."
+                ]
+            },
+            excel: {
+                title: "Microsoft Excel",
+                description: "Spreadsheet management, cell references, formulas, functions, and charting.",
+                objective: [
+                    { q: "What is Microsoft Excel mainly used for?", options: ["Editing videos", "Creating and managing spreadsheets", "Designing posters", "Browsing the internet"], ans: 1 },
+                    { q: "A file created in Microsoft Excel is called a:", options: ["Document", "Presentation", "Workbook", "Database"], ans: 2 },
+                    { q: "A workbook is made up of:", options: ["Slides", "Worksheets", "Pages only", "Paragraphs"], ans: 1 },
+                    { q: "The intersection of a row and a column is called a:", options: ["Table", "Cell", "Box", "Range"], ans: 1 },
+                    { q: "Columns in Excel are identified by:", options: ["Numbers", "Letters", "Symbols", "Roman numerals"], ans: 1 },
+                    { q: "Rows in Excel are identified by:", options: ["Letters", "Numbers", "Symbols", "Colors"], ans: 1 },
+                    { q: "Which of the following is a valid cell reference?", options: ["1A", "A1", "AA", "11"], ans: 1 },
+                    { q: "Which symbol is used to begin a formula in Excel?", options: ["+", "#", "=", "@"], ans: 2 },
+                    { q: "Which formula is used to add numbers in Excel?", options: ["=ADD()", "=SUM()", "=PLUS()", "=TOTAL()"], ans: 1 },
+                    { q: "Which function calculates the average of numbers?", options: ["=MEAN()", "=AVERAGE()", "=AVGNUM()", "=MID()"], ans: 1 },
+                    { q: "Which function finds the highest value in a range?", options: ["=HIGH()", "=TOP()", "=MAX()", "=UP()"], ans: 2 },
+                    { q: "Which function finds the lowest value in a range?", options: ["=MIN()", "=LOW()", "=BOTTOM()", "=SMALLER()"], ans: 0 },
+                    { q: "What is a range in Excel?", options: ["A collection of selected cells", "A single row", "A single column", "A worksheet name"], ans: 0 },
+                    { q: "Which shortcut is commonly used to save an Excel workbook?", options: ["Ctrl + P", "Ctrl + S", "Ctrl + X", "Ctrl + A"], ans: 1 },
+                    { q: "Which shortcut is used to copy selected data?", options: ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + D"], ans: 0 },
+                    { q: "Which shortcut is used to paste copied data?", options: ["Ctrl + P", "Ctrl + V", "Ctrl + C", "Ctrl + Z"], ans: 1 },
+                    { q: "Which shortcut is used to undo an action?", options: ["Ctrl + U", "Ctrl + Y", "Ctrl + Z", "Ctrl + X"], ans: 2 },
+                    { q: "What is the purpose of Excel's Fill Handle?", options: ["To delete a worksheet", "To automatically copy or extend data and formulas", "To print a workbook", "To close Excel"], ans: 1 },
+                    { q: "Which feature can be used to arrange data from A to Z?", options: ["Sorting", "Filtering", "Formatting", "Merging"], ans: 0 },
+                    { q: "Which feature displays only records that meet certain conditions?", options: ["Sorting", "Filtering", "Printing", "Merging"], ans: 1 },
+                    { q: "Which Excel feature is used to represent data visually?", options: ["WordArt", "Charts", "Comments", "Headers"], ans: 1 },
+                    { q: "Which chart is commonly used to compare different categories?", options: ["Column chart", "Pie chart", "Line chart", "Area chart"], ans: 0 },
+                    { q: "What is the purpose of formatting cells?", options: ["To improve the appearance and presentation of data", "To delete formulas", "To close Excel", "To create a new computer"], ans: 0 },
+                    { q: "Which Excel feature combines two or more cells into one?", options: ["Wrap Text", "Merge & Center", "AutoSum", "Sort"], ans: 1 },
+                    { q: "Which of the following can Excel be used to create?", options: ["Budgets", "Student results", "Financial calculations", "All of the above"], ans: 3 }
+                ],
+                essay: [
+                    "What is Microsoft Excel? Explain five uses of Microsoft Excel.",
+                    "Explain the difference between a workbook, worksheet, row, column, and cell.",
+                    "What is an Excel formula? Give three examples.",
+                    "Explain five important Excel functions.",
+                    "Explain how to create and format a simple student result sheet in Microsoft Excel."
+                ]
+            },
+            access: {
+                title: "Microsoft Access",
+                description: "Database management, tables, queries, forms, reports, and primary keys.",
+                objective: [
+                    { q: "What is Microsoft Access?", options: ["A word-processing program", "A database management program", "A presentation program", "A drawing program"], ans: 1 },
+                    { q: "What is a database?", options: ["A collection of related data", "A computer keyboard", "A presentation slide", "A type of printer"], ans: 0 },
+                    { q: "Which object is used to store data in Microsoft Access?", options: ["Query", "Form", "Table", "Report"], ans: 2 },
+                    { q: "What is a field in Microsoft Access?", options: ["A complete database", "A column containing a particular type of information", "A computer screen", "A printed document"], ans: 1 },
+                    { q: "What is a record?", options: ["A row of related information in a table", "A database program", "A column heading", "A report"], ans: 0 },
+                    { q: "Which Access object is used to search and retrieve specific information?", options: ["Table", "Query", "Form", "Report"], ans: 1 },
+                    { q: "Which object provides a user-friendly way to enter data?", options: ["Form", "Query", "Table", "Report"], ans: 0 },
+                    { q: "Which Access object is mainly used to present data for printing?", options: ["Table", "Form", "Report", "Query"], ans: 2 },
+                    { q: "Which field type is suitable for storing a person's name?", options: ["Text/Short Text", "Currency", "Date/Time", "Yes/No"], ans: 0 },
+                    { q: "Which data type is used to store dates?", options: ["Currency", "Date/Time", "Yes/No", "Attachment"], ans: 1 },
+                    { q: "Which data type is used to store money values?", options: ["Currency", "Short Text", "Yes/No", "Date/Time"], ans: 0 },
+                    { q: "What is a primary key?", options: ["A field that uniquely identifies each record", "A password for Microsoft Access", "A type of report", "A database folder"], ans: 0 },
+                    { q: "Which symbol commonly identifies a primary key in Access?", options: ["Star", "Key symbol", "Circle", "Triangle"], ans: 1 },
+                    { q: "Which view is commonly used to design the structure of a table?", options: ["Print Preview", "Design View", "Slide View", "Reading View"], ans: 1 },
+                    { q: "Which view allows you to enter and edit records in a table?", options: ["Datasheet View", "Design View", "Print Preview", "Layout Preview"], ans: 0 },
+                    { q: "What does a query allow you to do?", options: ["Create animations", "Retrieve and manipulate selected data", "Draw pictures", "Create music"], ans: 1 },
+                    { q: "Which of the following can be used as a primary key?", options: ["Student ID", "Student name", "Student address", "Student age"], ans: 0 },
+                    { q: "What is a relationship in Microsoft Access?", options: ["A connection between tables", "A connection between computers", "A type of font", "A type of printer"], ans: 0 },
+                    { q: "Which relationship occurs when one record in one table relates to many records in another table?", options: ["One-to-one", "One-to-many", "Many-to-one only", "None"], ans: 1 },
+                    { q: "What is the purpose of a form?", options: ["To make data entry easier", "To shut down the computer", "To browse websites", "To create operating systems"], ans: 0 },
+                    { q: "Which data type can store True/False values?", options: ["Currency", "Yes/No", "Date/Time", "Number"], ans: 1 },
+                    { q: "Which Access object can generate a formatted summary of database information?", options: ["Report", "Table", "Field", "Record"], ans: 0 },
+                    { q: "What is the purpose of sorting data?", options: ["To arrange data in a particular order", "To delete the database", "To close Microsoft Access", "To create a password"], ans: 0 },
+                    { q: "What does filtering data mean?", options: ["Deleting all records", "Showing only records that meet specified conditions", "Closing the table", "Changing the computer screen"], ans: 1 },
+                    { q: "Which file extension is commonly associated with modern Microsoft Access databases?", options: [".docx", ".xlsx", ".accdb", ".pptx"], ans: 2 }
+                ],
+                essay: [
+                    "What is Microsoft Access? Explain four important uses of Microsoft Access.",
+                    "Explain the four major objects in Microsoft Access.",
+                    "What is a primary key? Explain its importance in a database.",
+                    "Explain the difference between a table, query, form, and report.",
+                    "Explain how you would create a simple student database in Microsoft Access."
+                ]
+            },
+            internet: {
+                title: "Internet Communications",
+                description: "World Wide Web, web browsers, emails, search engines, and online safety.",
+                objective: [
+                    { q: "What is the Internet?", options: ["A type of computer", "A worldwide network of connected computers", "A Microsoft program", "A printer"], ans: 1 },
+                    { q: "What does WWW stand for?", options: ["World Wide Web", "World Web Window", "Wide World Website", "Web World Wide"], ans: 0 },
+                    { q: "Which of the following is used to access websites?", options: ["Web browser", "Calculator", "Paint", "Notepad"], ans: 0 },
+                    { q: "Which of these is a web browser?", options: ["Microsoft Excel", "Google Chrome", "Microsoft Word", "Microsoft Access"], ans: 1 },
+                    { q: "What is a website?", options: ["A collection of related web pages", "A computer keyboard", "A computer virus", "A storage device"], ans: 0 },
+                    { q: "What does URL stand for?", options: ["Uniform Resource Locator", "Universal Radio Link", "User Resource Line", "Uniform Reading Language"], ans: 0 },
+                    { q: "Which device is commonly used to connect a computer to the Internet?", options: ["Monitor", "Modem/router", "Keyboard", "Scanner"], ans: 1 },
+                    { q: "What is an email?", options: ["Electronic mail sent through a network", "A computer game", "A type of printer", "A computer folder"], ans: 0 },
+                    { q: "Which symbol is normally found in an email address?", options: ["#", "@", "$", "&"], ans: 1 },
+                    { q: "Which of the following is an example of an email service?", options: ["Gmail", "Excel", "Windows", "PowerPoint"], ans: 0 },
+                    { q: "What is a search engine?", options: ["A tool used to find information on the Internet", "A computer monitor", "A word processor", "A storage device"], ans: 0 },
+                    { q: "Which of these is a search engine?", options: ["Google", "Word", "Access", "Publisher"], ans: 0 },
+                    { q: "What is downloading?", options: ["Sending a file from your computer to the Internet", "Receiving a file from the Internet to your device", "Deleting a file", "Printing a document"], ans: 1 },
+                    { q: "What is uploading?", options: ["Sending a file from your device to an online service", "Receiving a file from the Internet", "Opening a folder", "Closing a browser"], ans: 0 },
+                    { q: "What is social media?", options: ["Online platforms that allow people to communicate and share content", "A computer operating system", "A printer program", "A type of hard drive"], ans: 0 },
+                    { q: "Which of the following is a social media platform?", options: ["Facebook", "Microsoft Word", "Windows Explorer", "Calculator"], ans: 0 },
+                    { q: "What is a password used for?", options: ["Decorating a website", "Protecting an account from unauthorized access", "Increasing Internet speed", "Printing documents"], ans: 1 },
+                    { q: "Which password is generally stronger?", options: ["123456", "password", "Bai123", "K7@mP!92x"], ans: 3 },
+                    { q: "What is a computer virus?", options: ["A harmful program that can damage or interfere with computer systems", "A web browser", "A search engine", "An email account"], ans: 0 },
+                    { q: "What is online communication?", options: ["Communication using Internet-connected devices and services", "Writing only with a pen", "Talking without any device", "Printing a document"], ans: 0 },
+                    { q: "Which of the following can be used for online video communication?", options: ["Video conferencing", "Calculator", "Paint", "File Explorer"], ans: 0 },
+                    { q: "What is phishing?", options: ["A method of creating websites", "A fraudulent attempt to obtain sensitive information by pretending to be trustworthy", "A type of computer keyboard", "A search technique"], ans: 1 },
+                    { q: "What should you do if you receive a suspicious email asking for your password?", options: ["Send your password immediately", "Ignore or report it and verify the sender", "Forward it to everyone", "Click every link in the email"], ans: 1 },
+                    { q: "What does 'log in' mean?", options: ["Turning off a computer", "Entering your account credentials to access an account", "Deleting an account", "Installing a printer"], ans: 1 },
+                    { q: "What is the purpose of a web browser's address bar?", options: ["To type or display a website address/URL", "To change the computer's password", "To print documents", "To store files permanently"], ans: 0 }
+                ],
+                essay: [
+                    "What is the Internet? Explain four uses of the Internet.",
+                    "What is email? Explain five important parts or features of an email.",
+                    "What is web browser? Give four examples and explain its purpose.",
+                    "What is Internet safety? Explain five ways of staying safe online.",
+                    "Explain the difference between downloading and uploading."
+                ]
+            }
+        };
+
+        let state = {
+            student: { id: '', name: '', phone: '', email: '' },
+            currentCourseKey: null,
+            currentQuestionIndex: 0,
+            questions: [],
+            userAnswers: {}, // index -> answer (number for obj, string for essay)
+            timerInterval: null,
+            timeLeft: 3600, // 60 minutes
+            examSubmitted: false,
+            generatedCode: '1234',
+            enteredCode: ''
+        };
+
+        // Check restriction on load
+        window.onload = function() {
+            checkExamRestriction();
+        };
+
+        function checkExamRestriction() {
+            const lastExamDate = localStorage.getItem('ssca_last_exam_date');
+            if (lastExamDate) {
+                const today = new Date().toDateString();
+                if (lastExamDate === today) {
+                    showLockedOutView();
+                }
+            }
+        }
+
+        function showLockedOutView() {
+            document.getElementById('view-auth').innerHTML = `
+                <div class="text-center py-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-rose-500/10 rounded-2xl mb-3 border border-rose-500/30">
+                        <i class="fa-solid fa-ban text-2xl text-rose-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white mb-2">Exam Already Taken</h2>
+                    <p class="text-sm text-slate-400 mb-6">You have already completed or submitted your exam today. Per SmartStart Computer Academy policy, you can only attempt the examination once per day. Please return tomorrow.</p>
+                    <button onclick="localStorage.clear(); location.reload();" class="text-xs text-ssca-400 hover:underline">Reset Demo Session</button>
+                </div>
+            `;
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('auth-id').value.trim();
+            const name = document.getElementById('auth-name').value.trim();
+            const phone = document.getElementById('auth-phone').value.trim();
+            const email = document.getElementById('auth-email').value.trim();
+
+            if (!id || !name || !phone || !email) {
+                showError('auth-error', 'Please fill in all required fields.');
+                return;
+            }
+
+            state.student = { id, name, phone, email };
+
+            // Generate 4-digit code
+            state.generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('display-generated-code').innerText = state.generatedCode;
+
+            // Simulate sending admin notification to skargbo31@gmail.com
+            console.log(`[ADMIN NOTIFICATION SENT TO skargbo31@gmail.com]: Student ${name} (${id}) signed up. Verification code: ${state.generatedCode}`);
+
+            // Switch view
+            document.getElementById('view-auth').classList.add('hidden');
+            document.getElementById('view-verify').classList.remove('hidden');
+        }
+
+        function showError(elementId, msg) {
+            const el = document.getElementById(elementId);
+            el.innerText = msg;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 4000);
+        }
+
+        function backToAuth() {
+            document.getElementById('view-verify').classList.add('hidden');
+            document.getElementById('view-auth').classList.remove('hidden');
+        }
+
+        function handleVerifyCode(e) {
+            e.preventDefault();
+            const codeInput = document.getElementById('input-verify-code').value.trim();
+
+            if (codeInput !== state.generatedCode) {
+                showError('verify-error', 'Incorrect verification code. Please check the code above.');
+                return;
+            }
+
+            // Success -> Proceed to Dashboard
+            document.getElementById('view-verify').classList.add('hidden');
+            document.getElementById('view-dashboard').classList.remove('hidden');
+
+            // Update Header info
+            document.getElementById('nav-student-name').innerText = state.student.name;
+            document.getElementById('nav-student-id').innerText = state.student.id;
+            document.getElementById('header-user-info').classList.remove('hidden');
+            document.getElementById('header-user-info').classList.add('flex');
+
+            renderDashboardPrograms();
+        }
+
+        function renderDashboardPrograms() {
+            const grid = document.getElementById('programs-grid');
+            grid.innerHTML = '';
+
+            for (const [key, course] of Object.entries(COURSES)) {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/80 border border-slate-700/80 rounded-xl p-5 flex flex-col justify-between hover:border-ssca-500 transition-all group";
+                card.innerHTML = `
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-ssca-500/10 flex items-center justify-center text-ssca-400 mb-3 group-hover:bg-ssca-500 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base mb-1">${course.title}</h3>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">${course.description}</p>
+                    </div>
+                    <button onclick="startExam('${key}')" class="w-full py-2.5 px-4 bg-ssca-500/20 hover:bg-ssca-500 text-ssca-300 hover:text-white font-semibold rounded-lg text-xs transition-all border border-ssca-500/40 flex items-center justify-center space-x-2">
+                        <span>Take Test</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        function startExam(courseKey) {
+            state.currentCourseKey = courseKey;
+            const course = COURSES[courseKey];
+            
+            // Combine Objective (25) and Essay (5) into one array of 30 questions
+            state.questions = [];
+            course.objective.forEach((obj, idx) => {
+                state.questions.push({ type: 'objective', ...obj, originalIndex: idx });
+            });
+            course.essay.forEach((essayPrompt, idx) => {
+                state.questions.push({ type: 'essay', q: essayPrompt, originalIndex: idx });
+            });
+
+            state.currentQuestionIndex = 0;
+            state.userAnswers = {};
+            state.timeLeft = 3600; // 60 minutes
+
+            // Switch view
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-exam').classList.remove('hidden');
+
+            document.getElementById('exam-course-title').innerText = course.title;
+            document.getElementById('exam-course-name').innerText = "SmartStart Final Examination";
+
+            renderQuestion();
+            startTimer();
+            initAntiCheat();
+        }
+
+        function initAntiCheat() {
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            window.addEventListener('blur', handleWindowBlur);
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden && !state.examSubmitted) {
+                triggerCheatViolation();
+            }
+        }
+
+        function handleWindowBlur() {
+            if (!state.examSubmitted) {
+                triggerCheatViolation();
+            }
+        }
+
+        function triggerCheatViolation() {
+            if (state.examSubmitted) return;
+            const warning = document.getElementById('cheat-warning');
+            warning.classList.remove('hidden');
+            
+            // Instantly fail and submit exam
+            setTimeout(() => {
+                alert("Security Violation Detected: You left or switched the application tab. Your exam has been automatically terminated.");
+                submitExamDueToCheat();
+            }, 500);
+        }
+
+        function removeAntiCheat() {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleWindowBlur);
+        }
+
+        function startTimer() {
+            state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateTimerDisplay();
+
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    alert("Time is up! Your exam will now be submitted automatically.");
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(state.timeLeft / 60);
+            const seconds = state.timeLeft % 60;
+            document.getElementById('timer-display').innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function renderQuestion() {
+            const q = state.questions[state.currentQuestionIndex];
+            const total = state.questions.length;
+
+            document.getElementById('question-counter').innerText = `Question ${state.currentQuestionIndex + 1} of ${total}`;
+            document.getElementById('question-text').innerText = q.q;
+
+            const badge = document.getElementById('question-section-badge');
+            const optionsContainer = document.getElementById('options-container');
+            const essayContainer = document.getElementById('essay-container');
+
+            if (q.type === 'objective') {
+                badge.innerText = "Section A: Objective Question";
+                badge.className = "bg-ssca-500/20 text-ssca-300 text-xs px-3 py-1 rounded-full font-semibold border border-ssca-500/30";
+                optionsContainer.classList.remove('hidden');
+                essayContainer.classList.add('hidden');
+
+                optionsContainer.innerHTML = '';
+                q.options.forEach((opt, idx) => {
+                    const isSelected = state.userAnswers[state.currentQuestionIndex] === idx;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.onclick = () => selectObjectiveOption(idx);
+                    btn.className = `w-full text-left p-4 rounded-xl border transition-all flex items-center space-x-3 text-sm ${
+                        isSelected 
+                            ? 'bg-ssca-500/20 border-ssca-500 text-white font-medium shadow-md' 
+                            : 'bg-slate-900/60 border-slate-700/80 text-slate-300 hover:bg-slate-800'
+                    }`;
+                    btn.innerHTML = `
+                        <span class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-600 flex items-center justify-center font-bold text-xs ${isSelected ? 'bg-ssca-500 border-ssca-400 text-white' : 'text-slate-400'}">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span>${opt}</span>
+                    `;
+                    optionsContainer.appendChild(btn);
+                });
+            } else {
+                badge.innerText = "Section B: Essay Question";
+                badge.className = "bg-blue-500/20 text-blue-300 text-xs px-3 py-1 rounded-full font-semibold border border-blue-500/30";
+                optionsContainer.classList.add('hidden');
+                essayContainer.classList.remove('hidden');
+
+                const textarea = document.getElementById('essay-answer');
+                textarea.value = state.userAnswers[state.currentQuestionIndex] || '';
+                textarea.oninput = (e) => {
+                    state.userAnswers[state.currentQuestionIndex] = e.target.value;
+                };
+            }
+
+            // Nav buttons state
+            document.getElementById('btn-prev').disabled = state.currentQuestionIndex === 0;
+            const nextBtn = document.getElementById('btn-next');
+            if (state.currentQuestionIndex === total - 1) {
+                nextBtn.innerHTML = `<span>Submit Exam</span> <i class="fa-solid fa-check"></i>`;
+                nextBtn.className = "px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm transition-all flex items-center space-x-2 shadow-lg shadow-emerald-500/20";
+            } else {
+                nextBtn.innerHTML = `<span>Next</span> <i class="fa-solid fa-arrow-right"></i>`;
+                nextBtn.className = "px-6 py-2.5 bg-ssca-500 hover:bg-ssca-600 text-white font-semibold rounded-xl text-sm transition-all flex items-center space-x-2 shadow-lg shadow-ssca-500/20";
+            }
+
+            renderDots();
+        }
+
+        function selectObjectiveOption(idx) {
+            state.userAnswers[state.currentQuestionIndex] = idx;
+            renderQuestion();
+        }
+
+        function prevQuestion() {
+            if (state.currentQuestionIndex > 0) {
+                state.currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentQuestionIndex < state.questions.length - 1) {
+                state.currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                if (confirm("Are you sure you want to submit your exam?")) {
+                    submitExam();
+                }
+            }
+        }
+
+        function renderDots() {
+            const dotsContainer = document.getElementById('question-dots');
+            dotsContainer.innerHTML = '';
+            state.questions.forEach((_, idx) => {
+                const dot = document.createElement('button');
+                const answered = state.userAnswers[idx] !== undefined && state.userAnswers[idx] !== '';
+                const current = idx === state.currentQuestionIndex;
+                dot.className = `w-7 h-7 rounded-lg text-xs font-bold transition-all ${
+                    current 
+                        ? 'bg-ssca-500 text-white ring-2 ring-ssca-400' 
+                        : answered 
+                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' 
+                            : 'bg-slate-800 text-slate-500 border border-slate-700'
+                }`;
+                dot.innerText = idx + 1;
+                dot.onclick = () => {
+                    state.currentQuestionIndex = idx;
+                    renderQuestion();
+                };
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function submitExamDueToCheat() {
+            state.userAnswers = {}; // Fail exam
+            submitExam();
+        }
+
+        function submitExam() {
+            if (state.examSubmitted) return;
+            state.examSubmitted = true;
+            clearInterval(state.timerInterval);
+            removeAntiCheat();
+
+            // Enforce daily restriction in localStorage
+            localStorage.setItem('ssca_last_exam_date', new Date().toDateString());
+
+            // Calculate objective score (25 objective questions)
+            let objCorrect = 0;
+            let objTotal = 25;
+            for (let i = 0; i < 25; i++) {
+                if (state.questions[i] && state.userAnswers[i] === state.questions[i].ans) {
+                    objCorrect++;
+                }
+            }
+
+            const objScorePercent = Math.round((objCorrect / objTotal) * 100);
+            const passed = objScorePercent >= 50;
+
+            // Store results in window state for PDF download
+            window.examResultData = {
+                studentName: state.student.name,
+                studentId: state.student.id,
+                studentPhone: state.student.phone,
+                studentEmail: state.student.email,
+                courseName: COURSES[state.currentCourseKey].title,
+                objCorrect: objCorrect,
+                objTotal: objTotal,
+                objScorePercent: objScorePercent,
+                status: passed ? "PASSED (PASS)" : "FAILED (FAIL)",
+                date: new Date().toLocaleDateString()
+            };
+
+            // Simulate admin notification submission to skargbo31@gmail.com
+            console.log(`[ADMIN NOTIFICATION SENT TO skargbo31@gmail.com]: Student ${state.student.name} (${state.student.id}) submitted exam for ${COURSES[state.currentCourseKey].title}. Score: ${objCorrect}/${objTotal} (${objScorePercent}%)`);
+
+            // Switch to result view
+            document.getElementById('view-exam').classList.add('hidden');
+            document.getElementById('view-result').classList.remove('hidden');
+
+            document.getElementById('res-name').innerText = state.student.name;
+            document.getElementById('res-id').innerText = state.student.id;
+            document.getElementById('res-program').innerText = COURSES[state.currentCourseKey].title;
+            document.getElementById('res-obj-score').innerText = `${objCorrect} / ${objTotal} (${objScorePercent}%)`;
+            
+            const statusEl = document.getElementById('res-status');
+            statusEl.innerText = window.examResultData.status;
+            statusEl.className = passed ? "font-extrabold text-lg text-emerald-400" : "font-extrabold text-lg text-rose-400";
+        }
+
+        function downloadPDFResult() {
+            const data = window.examResultData;
+            if (!data) return;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Header Banner
+            doc.setFillColor(0, 60, 122);
+            doc.rect(0, 0, 210, 40, "F");
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("Helvetica", "bold");
+            doc.setFontSize(18);
+            doc.text("SMARTSTART COMPUTER ACADEMY", 105, 18, { align: "center" });
+            
+            doc.setFontSize(11);
+            doc.setFont("Helvetica", "normal");
+            doc.text("OFFICIAL EXAMINATION RESULT SHEET", 105, 28, { align: "center" });
+
+            // Student Information Box
+            doc.setTextColor(40, 40, 40);
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "bold");
+            doc.text("Student Details:", 20, 55);
+
+            doc.setFont("Helvetica", "normal");
+            doc.setFontSize(11);
+            doc.text(`Full Name: ${data.studentName}`, 20, 65);
+            doc.text(`Admission ID: ${data.studentId}`, 20, 73);
+            doc.text(`Phone Number: ${data.studentPhone}`, 20, 81);
+            doc.text(`Email Address: ${data.studentEmail}`, 20, 89);
+            doc.text(`Examination Program: ${data.courseName}`, 20, 97);
+            doc.text(`Date of Examination: ${data.date}`, 20, 105);
+
+            // Scores Table / Box
+            doc.setFillColor(240, 244, 248);
+            doc.rect(20, 115, 170, 45, "F");
+
+            doc.setFont("Helvetica", "bold");
+            doc.text("Performance Summary", 28, 127);
+
+            doc.setFont("Helvetica", "normal");
+            doc.text(`Objective Score (Section A): ${data.objCorrect} / ${data.objTotal} (${data.objScorePercent}%)`, 28, 137);
+            doc.text(`Essay Questions (Section B): Submitted for Grading`, 28, 145);
+
+            doc.setFont("Helvetica", "bold");
+            doc.setTextColor(data.status.includes("PASSED") ? 0 : 200, data.status.includes("PASSED") ? 120 : 0, 0);
+            doc.text(`Overall Status: ${data.status}`, 28, 153);
+
+            // Footer Signature
+            doc.setTextColor(100, 100, 100);
+            doc.setFontSize(10);
+            doc.text("Admin Email: skargbo31@gmail.com", 105, 185, { align: "center" });
+            doc.text("SmartStart Computer Academy - 'Start Smart, Finish Strong.'", 105, 193, { align: "center" });
+
+            doc.save(`SSCA_Result_${data.studentId}_${data.courseName.replace(/\s+/g, '_')}.pdf`);
+        }
+
+        function logoutSession() {
+            localStorage.clear();
+            location.reload();
+        }
+    </script>
+</body>
+</html>
